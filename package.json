@@ -5,9 +5,9 @@
   "main": "chat.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node chat.js"
+    "start": "node slack.js"
   },
-  "author": "",
+  "author": "Mohammad Bahaa",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
