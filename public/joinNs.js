@@ -1,28 +1,30 @@
-function joinNs(endpoint){
-    if(nsSocket){
+function joinNs(endpoint) {
+    if (nsSocket) {
         // check to see if nsSocket is actually a socket
         nsSocket.close();
         // remove the eventListener before it's added again
-        document.querySelector('#user-input').removeEventListener('submit',formSubmission)
+        document.querySelector('#user-input').removeEventListener('submit', formSubmission)
     }
+
     nsSocket = io(`http://localhost:9000${endpoint}`)
-    nsSocket.on('nsRoomLoad',(nsRooms)=>{
+
+    nsSocket.on('nsRoomLoad', (nsRooms) => {
         // console.log(nsRooms)
         let roomList = document.querySelector('.room-list');
         roomList.innerHTML = "";
-        nsRooms.forEach((room)=>{
+        nsRooms.forEach((room) => {
             let glyph;
-            if(room.privateRoom){
+            if (room.privateRoom) {
                 glyph = 'lock'
-            }else{
+            } else {
                 glyph = 'globe'
             }
             roomList.innerHTML += `<li class="room"><span class="glyphicon glyphicon-${glyph}"></span>${room.roomTitle}</li>`
         })
         // add click listener to each room
         let roomNodes = document.getElementsByClassName('room');
-        Array.from(roomNodes).forEach((elem)=>{
-            elem.addEventListener('click',(e)=>{
+        Array.from(roomNodes).forEach((elem) => {
+            elem.addEventListener('click', (e) => {
                 // console.log("Somone clicked on ",e.target.innerText);
                 joinRoom(e.target.innerText)
             })
@@ -32,23 +34,26 @@ function joinNs(endpoint){
         const topRoomName = topRoom.innerText;
         // console.log(topRoomName);
         joinRoom(topRoomName)
-        
-    })    
-    nsSocket.on('messageToClients',(msg)=>{
+
+    })
+
+    nsSocket.on('messageToClients', (msg) => {
         console.log(msg)
         const newMsg = buildHTML(msg);
         document.querySelector('#messages').innerHTML += newMsg
     })
-    document.querySelector('.message-form').addEventListener('submit',formSubmission)
+    document.querySelector('.message-form').addEventListener('submit', formSubmission)
 }
 
-function formSubmission(event){
+function formSubmission(event) {
     event.preventDefault();
     const newMessage = document.querySelector('#user-message').value;
-    nsSocket.emit('newMessageToServer',{text: newMessage})
+    nsSocket.emit('newMessageToServer', {
+        text: newMessage
+    })
 }
 
-function buildHTML(msg){
+function buildHTML(msg) {
     const convertedDate = new Date(msg.time).toLocaleString();
     const newHTML = `
     <li>

@@ -1,5 +1,5 @@
-class Namespace{
-    constructor(id, nsTitle, img, endpoint){
+class Namespace {
+    constructor(id, nsTitle, img, endpoint) {
         this.id = id;
         this.img = img;
         this.nsTitle = nsTitle;
@@ -7,7 +7,7 @@ class Namespace{
         this.rooms = [];
     }
 
-    addRoom(roomObj){
+    addRoom(roomObj) {
         this.rooms.push(roomObj);
     }
 
